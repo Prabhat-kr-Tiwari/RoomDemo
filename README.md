@@ -99,7 +99,7 @@ interface UserDao {
     @Delete
     fun delete(user: User)
 }
-To learn more about DAOs, see Accessing data using Room DAOs.
+
 
 Database
 The following code defines an AppDatabase class to hold the database. AppDatabase defines the database configuration and serves as the app's main access point to the persisted data. The database class must satisfy the following conditions:
@@ -108,12 +108,15 @@ The class must be annotated with a @Database annotation that includes an entitie
 The class must be an abstract class that extends RoomDatabase.
 For each DAO class that is associated with the database, the database class must define an abstract method that has zero arguments and returns an instance of the DAO class.
 Kotlin
-Java
+
 
 @Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 }
+
+
+
 Note: If your app runs in a single process, you should follow the singleton design pattern when instantiating an AppDatabase object. Each RoomDatabase instance is fairly expensive, and you rarely need access to multiple instances within a single process.
 
 If your app runs in multiple processes, include enableMultiInstanceInvalidation() in your database builder invocation. That way, when you have an instance of AppDatabase in each process, you can invalidate the shared database file in one process, and this invalidation automatically propagates to the instances of AppDatabase within other processes.
@@ -128,6 +131,9 @@ val db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "database-name"
         ).build()
+        
+        
+        
 You can then use the abstract methods from the AppDatabase to get an instance of the DAO. In turn, you can use the methods from the DAO instance to interact with the database:
 
 Kotlin
